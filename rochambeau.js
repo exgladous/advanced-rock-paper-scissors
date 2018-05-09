@@ -3,8 +3,10 @@ var playerChoice,
     rockButton = document.getElementById("rock"),
     paperButton = document.getElementById("paper"),
     scissorsButton = document.getElementById("scissors"),
+    lizardButton = document.getElementById("lizard"),
+    spockButton = document.getElementById("spock"),
     playButton = document.getElementById("play"),
-    choices = ["Rock", "Paper", "Scissors"],
+    choices = ["Rock", "Paper", "Scissors", "Lizard", "Spock"],
     score = [0, 0, 0];
 
 rockButton.addEventListener('click', () => {
@@ -15,6 +17,12 @@ paperButton.addEventListener('click', () => {
 });
 scissorsButton.addEventListener('click', () => {
     storePlayerChoice(2)
+});
+lizardButton.addEventListener('click', () => {
+    storePlayerChoice(3)
+});
+spockButton.addEventListener('click', () => {
+    storePlayerChoice(4)
 });
 playButton.addEventListener('click', () => {
     playGame()
@@ -27,7 +35,7 @@ function storePlayerChoice(choice) {
 }
 
 function storeComputerChoice() {
-    computerChoice = Math.floor(Math.random() * 3);
+    computerChoice = Math.floor(Math.random() * 5);
     console.log("Computer choice = " + computerChoice);
 }
 
@@ -36,15 +44,23 @@ function playGame() {
         console.log("tie");
         updateScore(1);
         displayGameResult("tie")
-    } else if (playerChoice == 0 && computerChoice == 2) {
+    } else if (playerChoice == 0 && (computerChoice == 2 || computerChoice == 3)) {
         console.log("win");
         updateScore(0);
         displayGameResult("win")
-    } else if (playerChoice == 1 && computerChoice == 0) {
+    } else if (playerChoice == 1 && (computerChoice == 0 || computerChoice == 4)) {
         console.log("win");
         updateScore(0);
         displayGameResult("win")
-    } else if (playerChoice == 2 && computerChoice == 1) {
+    } else if (playerChoice == 2 && (computerChoice == 1 || computerChoice == 3)) {
+        console.log("win");
+        updateScore(0);
+        displayGameResult("win")
+    } else if (playerChoice == 3 && (computerChoice == 4 || computerChoice == 1)) {
+        console.log("win");
+        updateScore(0);
+        displayGameResult("win")
+    } else if (playerChoice == 4 && (computerChoice == 2 || computerChoice == 0)) {
         console.log("win");
         updateScore(0);
         displayGameResult("win")
