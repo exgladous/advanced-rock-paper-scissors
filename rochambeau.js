@@ -1,16 +1,26 @@
-var playerChoice,
-    computerChoice,
+var player = new Player(),
+    computer = new Player(),
     rockButton = document.getElementById("rock"),
     paperButton = document.getElementById("paper"),
     scissorsButton = document.getElementById("scissors"),
     lizardButton = document.getElementById("lizard"),
     spockButton = document.getElementById("spock"),
     playButton = document.getElementById("play"),
-    choices = ["Rock", "Paper", "Scissors", "Lizard", "Spock"],
-    score = [0, 0, 0],
     localscore = [0, 0, 0],
     matchwins = 0,
-    matchlosses = 0;
+    matchlosses = 0,
+    choices = {
+        rock: 0,
+        paper: 1,
+        scissors: 2,
+        lizard: 3,
+        spock: 4
+    },
+    score = {
+        wins: 0,
+        losses: 0,
+        ties: 0
+    };
 
 rockButton.addEventListener('click', () => {
     storePlayerChoice(0)
@@ -32,51 +42,49 @@ playButton.addEventListener('click', () => {
     playGame()
 });
 
+function Player() {
+    this.choice = null;
+}
+
 function storePlayerChoice(choice) {
-    playerChoice = choice;
-    console.log("My choice = " + playerChoice);
+    player.choice = choice;
+    console.log("My choice = " + player.choice);
+    storeComputerChoice();
 }
 
 function storeComputerChoice() {
-    computerChoice = Math.floor(Math.random() * 5);
-    console.log("Computer choice = " + computerChoice);
+    computer.choice = Math.floor(Math.random() * 5);
+    console.log("Computer choice = " + computer.choice);
 }
 
 function playGame() {
-    if (playerChoice == computerChoice) {
+    if (player.choice == computer.choice) {
         console.log("tie");
-        updateScore(1);
-        updateMatchScore(1);
+        ++score.ties;
         displayGameResult("tie")
-    } else if (playerChoice == 0 && (computerChoice == 2 || computerChoice == 3)) {
+    } else if (player.choice == choices.rock && (computer.choice == choices.scissors || computer.choice == choices.lizard)) {
         console.log("win");
-        updateScore(0);
-        updateMatchScore(0);
+        ++score.wins;
         displayGameResult("win")
-    } else if (playerChoice == 1 && (computerChoice == 0 || computerChoice == 4)) {
+    } else if (player.choice == choices.paper && (computer.choice == choices.rock || computer.choice == choices.spock)) {
         console.log("win");
-        updateScore(0);
-        updateMatchScore(0);
+        ++score.wins;
         displayGameResult("win")
-    } else if (playerChoice == 2 && (computerChoice == 1 || computerChoice == 3)) {
+    } else if (player.choice == choices.scissors && (computer.choice == choices.paper || computer.choice == choices.lizard)) {
         console.log("win");
-        updateScore(0);
-        updateMatchScore(0);
+        ++score.wins;
         displayGameResult("win")
-    } else if (playerChoice == 3 && (computerChoice == 4 || computerChoice == 1)) {
+    } else if (player.choice == choices.lizard && (computer.choice == choices.spock || computer.choice == choices.paper)) {
         console.log("win");
-        updateScore(0);
-        updateMatchScore(0);
+        ++score.wins;
         displayGameResult("win")
-    } else if (playerChoice == 4 && (computerChoice == 2 || computerChoice == 0)) {
+    } else if (player.choice == choices.spock && (computer.choice == choices.scissors || computer.choice == choices.rock)) {
         console.log("win");
-        updateScore(0);
-        updateMatchScore(0);
+        ++score.wins;
         displayGameResult("win")
     } else {
         console.log("lose");
-        updateScore(2);
-        updateMatchScore(2);
+        ++score.losses;
         displayGameResult("lose")
     }
 }
@@ -92,6 +100,7 @@ function displayGameResult(result) {
         var messagetwo = "Your current best of three score is " + localscore[0] + " - " + localscore[2] + ".";
     }
 
+    var message = "Your choice was " + player.choice + " and the computer's choice was " + computer.choice + ".";
     if (result === "win") {
         document.getElementById("result").textContent = message + " YOU WIN! " + messagetwo;
         document.getElementById("result").className = "alert alert-success";
@@ -109,10 +118,6 @@ function displayGameResult(result) {
     }
 }
 
-function updateScore(val) {
-    ++score[val];
-}
-
 function updateMatchScore(val) {
     ++localscore[val];
     if (localscore[0] == 2) {
@@ -125,7 +130,7 @@ function updateMatchScore(val) {
 }
 
 function updateScoreBoard() {
-    document.getElementById("wins").textContent = score[0];
-    document.getElementById("losses").textContent = score[2];
-    document.getElementById("ties").textContent = score[1];
+    document.getElementById("wins").textContent = score.wins;
+    document.getElementById("losses").textContent = score.losses;
+    document.getElementById("ties").textContent = score.ties;
 }
