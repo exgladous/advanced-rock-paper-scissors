@@ -137,12 +137,12 @@ function displayGameResult(result) {
 
 function updateMatchScore() {
     if (localscore.wins == 2) {
-        ++match.wins;
+        ++matchscore.wins;
         localscore.wins = 0;
         localscore.losses = 0;
         localscore.ties = 0;
     } else if (localscore.losses == 2) {
-        ++match.losses;
+        ++matchscore.losses;
         localscore.wins = 0;
         localscore.losses = 0;
         localscore.ties = 0;
@@ -153,6 +153,6 @@ function updateScoreBoard() {
     document.getElementById("wins").textContent = score.wins;
     document.getElementById("losses").textContent = score.losses;
     document.getElementById("ties").textContent = score.ties;
-    document.getElementById("matchwins").textContent = match.wins;
-    document.getElementById("matchlosses").textContent = match.losses;
+    document.getElementById("matchwins").textContent = matchscore.wins;
+    document.getElementById("matchlosses").textContent = matchscore.losses;
 }
