@@ -6,9 +6,10 @@ var player = new Player(),
     lizardButton = document.getElementById("lizard"),
     spockButton = document.getElementById("spock"),
     playButton = document.getElementById("play"),
-    localscore = [0, 0, 0],
-    matchwins = 0,
-    matchlosses = 0,
+    matchscore = {
+        wins: 0,
+        losses: 0
+    },
     choices = {
         rock: 0,
         paper: 1,
@@ -16,11 +17,23 @@ var player = new Player(),
         lizard: 3,
         spock: 4
     },
+    choicesinverse = {
+        0: "Rock",
+        1: "Paper",
+        2: "Scissors",
+        3: "Lizard",
+        4: "Spock"
+    },
     score = {
         wins: 0,
         losses: 0,
         ties: 0
-    };
+    },
+    localscore = {
+        wins: 0,
+        losses: 0,
+        ties: 0
+    }
 
 rockButton.addEventListener('click', () => {
     storePlayerChoice(0)
@@ -61,46 +74,52 @@ function playGame() {
     if (player.choice == computer.choice) {
         console.log("tie");
         ++score.ties;
+        ++localscore.ties;
         displayGameResult("tie")
     } else if (player.choice == choices.rock && (computer.choice == choices.scissors || computer.choice == choices.lizard)) {
         console.log("win");
         ++score.wins;
+        ++localscore.wins;
         displayGameResult("win")
     } else if (player.choice == choices.paper && (computer.choice == choices.rock || computer.choice == choices.spock)) {
         console.log("win");
         ++score.wins;
+        ++localscore.wins;
         displayGameResult("win")
     } else if (player.choice == choices.scissors && (computer.choice == choices.paper || computer.choice == choices.lizard)) {
         console.log("win");
         ++score.wins;
+        ++localscore.wins;
         displayGameResult("win")
     } else if (player.choice == choices.lizard && (computer.choice == choices.spock || computer.choice == choices.paper)) {
         console.log("win");
         ++score.wins;
+        ++localscore.wins;
         displayGameResult("win")
     } else if (player.choice == choices.spock && (computer.choice == choices.scissors || computer.choice == choices.rock)) {
         console.log("win");
         ++score.wins;
+        ++localscore.wins;
         displayGameResult("win")
     } else {
         console.log("lose");
         ++score.losses;
+        ++localscore.losses;
         displayGameResult("lose")
     }
 }
 
 function displayGameResult(result) {
-    var message = "Your choice was " + choices[playerChoice] + " and the computer's choice was " + choices[computerChoice] + ".";
 
-    if (localscore[0] == 2) {
-        var messagetwo = "You won the match " + localscore[0] + " - " + localscore[2] + ".";
-    } else if (localscore[2] == 2) {
-        var messagetwo = "You lost the match " + localscore[0] + " - " + localscore[2] + ".";
+    if (localscore.wins == 2) {
+        var messagetwo = "You won the match " + localscore.wins + " - " + localscore.losses + ".";
+    } else if (localscore.losses == 2) {
+        var messagetwo = "You lost the match " + localscore.wins + " - " + localscore.losses + ".";
     } else {
-        var messagetwo = "Your current best of three score is " + localscore[0] + " - " + localscore[2] + ".";
+        var messagetwo = "Your current best of three score is " + localscore.wins + " - " + localscore.losses + ".";
     }
 
-    var message = "Your choice was " + player.choice + " and the computer's choice was " + computer.choice + ".";
+    var message = "Your choice was " + choicesinverse[player.choice] + " and the computer's choice was " + choicesinverse[computer.choice] + ".";
     if (result === "win") {
         document.getElementById("result").textContent = message + " YOU WIN! " + messagetwo;
         document.getElementById("result").className = "alert alert-success";
@@ -112,20 +131,21 @@ function displayGameResult(result) {
         document.getElementById("result").className = "alert alert-info";
     }
     updateScoreBoard();
+    updateMatchScore();
 
-    if (localscore[0] == 2 || localscore[2] == 2) {
-        localscore = [0, 0, 0];
-    }
 }
 
-function updateMatchScore(val) {
-    ++localscore[val];
-    if (localscore[0] == 2) {
-        matchwins++
-        document.getElementById("matchwins").textContent = matchwins
-    } else if (localscore[2] == 2) {
-        matchlosses++
-        document.getElementById("matchlosses").textContent = matchlosses
+function updateMatchScore() {
+    if (localscore.wins == 2) {
+        ++match.wins;
+        localscore.wins = 0;
+        localscore.losses = 0;
+        localscore.ties = 0;
+    } else if (localscore.losses == 2) {
+        ++match.losses;
+        localscore.wins = 0;
+        localscore.losses = 0;
+        localscore.ties = 0;
     }
 }
 
@@ -133,4 +153,6 @@ function updateScoreBoard() {
     document.getElementById("wins").textContent = score.wins;
     document.getElementById("losses").textContent = score.losses;
     document.getElementById("ties").textContent = score.ties;
+    document.getElementById("matchwins").textContent = match.wins;
+    document.getElementById("matchlosses").textContent = match.losses;
 }
